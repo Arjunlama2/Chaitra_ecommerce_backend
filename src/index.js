@@ -7,5 +7,5 @@ const port=process.env.PORT
 const app=express()
 
 app.listen(port,()=>{
-    console.log( `Server is listening to port ${port}`)
+    console.log( `Server is listening to port${port}`)
 })
