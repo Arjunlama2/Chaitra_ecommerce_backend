@@ -1,0 +1,42 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+*.env.local
+*.env.*.local
+
+# Dependency directories
+/bower_components
+/coverage
+/lib
+/tsd.d.ts
+/typings
+
+# Optional files
+*.orig
+*.rej
+*.log
+*.swp
+.DS_Store
+/dist
+/build
+
+# Temporary files
+/tmp
+/out
+/backup*
+/cache
+/dumps
+
+# Editor specific
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
