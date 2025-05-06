@@ -10,6 +10,8 @@ router.route('/user')
     res.send('add usersk')
   })
 
+  
+
 // router.route("user/:id").delete().patch()
 
 
