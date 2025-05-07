@@ -11,10 +11,8 @@ const userSchema=mongoose.Schema({
     },
     role:{
         type:String,
-        enum:["buyer","seller"],
-        validate:(value)=>{
-            return value.tolowereCase()
-        }
+        enum:["buyer","seller"]
+        
     },
     password:{
         type:String,
