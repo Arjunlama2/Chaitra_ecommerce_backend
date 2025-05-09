@@ -1,6 +1,8 @@
 const mongoose=require("mongoose")
-const ObjectId=mongoose.Types.ObjectId
-const userSchema=mongoose.Schema({
+
+const Schema = mongoose.Schema;
+const ObjectId = Schema.ObjectId;
+const productSchema=mongoose.Schema({
     name:{
         type:String,
         require:true
@@ -34,5 +36,5 @@ const userSchema=mongoose.Schema({
 )
 
 
-const User=mongoose.model("User",userSchema)
-module.exports=User
+const Product=mongoose.model("Product",productSchema)
+module.exports=Product

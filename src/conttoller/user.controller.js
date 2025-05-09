@@ -74,7 +74,17 @@ const login = async (req, res, next) => {
   }
 };
 
+const getUsers=async(req,res,next)=>{
+  try{
+
+    const user=await User.find()
+    res.status(201).send(user.reverse())
+  }catch(err){
+    next(err)
+  }
+}
 module.exports = {
   createUser,
   login,
+  getUsers
 };

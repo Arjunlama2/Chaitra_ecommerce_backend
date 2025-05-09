@@ -1,0 +1,42 @@
+const Joi = require("joi");
+const Category = require("../model/category.model");
+const Product = require("../model/product.model");
+
+const productSchema = Joi.object({
+  name: Joi.string().required(),
+  price: Joi.string().required(),
+  description: Joi.string().required(),
+  category: Joi.string(),
+  createdBy: Joi.string(),
+});
+
+const createProduct = async (req, res, next) => {
+  try {
+    const { error, value } = productSchema.validate(req.body, {
+      allowUnknown: true,
+    });
+    if (!error) {
+      await Product.create(value);
+      res.status(200).send({ message: "Product created sucessfully" });
+    } else {
+      next(error);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+const getProducts=async(req,res,next)=>{
+    try{
+        const product=await Product.find().populate("category").populate("createdBy",{password:0})
+        res.status(200).send(product.reverse())
+    }catch(err){
+        next(err)
+    }
+}
+
+module.exports={
+    createProduct,
+    getProducts
+    
+}

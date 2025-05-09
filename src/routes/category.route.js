@@ -1,13 +1,15 @@
 const express = require("express");
 const { authenticate, isSeller } = require("../middleware/auth");
 const {
-  createProduct,
-  getProducts,
-} = require("../conttoller/product.contoller");
+  createCategory,
+  getCategories,
+} = require("../conttoller/category.controller");
 
 const router = express.Router();
-router.route("/").get(getProducts)
-.post(authenticate, isSeller, createProduct);
+router
+  .route("/")
+  .get(getCategories)
+  .post(authenticate, isSeller, createCategory);
 // router.route("/:id").get().delete().patch()
 
 module.exports = router;
