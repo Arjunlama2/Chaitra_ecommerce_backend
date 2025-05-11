@@ -29,7 +29,7 @@ const createCategory=async(req,res,next)=>{
 
 const getCategories=async(req,res,next)=>{
     try{
-        const data=await Category.find()
+        const data=await Category.find({})
         res.status(201).send(data)
     }catch(err){
         next(err)
