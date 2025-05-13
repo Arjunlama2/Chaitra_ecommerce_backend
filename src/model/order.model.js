@@ -16,9 +16,11 @@ const orderSchema=mongoose.Schema({
     }
     ,
 
-    OrderedBy:{
+    OrderedBy:{ 
         type:ObjectId,
-        ref:"User"
+        ref:"User",
+        required:true
+
 
 
     }

@@ -2,6 +2,7 @@ const Auth= require("./user.route");
 const Product=require("./product.route")
 const express=require("express")
 const category=require("./category.route")
+const order=require("./order.route")
 const router=express.Router()
 
 
@@ -18,7 +19,10 @@ const defaultRoutes=[
         path:"/category",
         route:category
     },
-  
+  {
+        path:"/order",
+        route:order
+    },
   
 
 ]

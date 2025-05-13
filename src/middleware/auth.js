@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { SELLER } = require("../../constants");
+const { SELLER ,BUYER} = require("../../constants");
 
 const authenticate=(req,res,next)=>{
 const token=req.headers.authorization.split(" ")[1]
