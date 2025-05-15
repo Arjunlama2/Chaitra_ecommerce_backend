@@ -25,11 +25,11 @@ const createUser = async (req, res, next) => {
     const data = req.body;
     const { error, value } = schema.validate(data, {
       allowUnknown: true,
+      abortEarly:false
     });
-    if (error) {
-      throw new Error(error);
-    }
-    const password = value.password;
+  
+    if(!error){
+const password = value.password;
     delete value.password;
 
     const salt = await bcrypt.genSalt(10);
@@ -37,8 +37,15 @@ const createUser = async (req, res, next) => {
 
     const user = await User.create({ ...value, password: hashedpassword });
     res.status(201).send("Signedup successfully");
+    }else{
+     throw error
+   
+      
+    }
+    
   } catch (err) {
     next(err);
+
   }
 };
 

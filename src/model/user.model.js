@@ -1,3 +1,4 @@
+const { required } = require("joi");
 const mongoose = require("mongoose");
 
 const userSchema = mongoose.Schema(
@@ -6,10 +7,12 @@ const userSchema = mongoose.Schema(
       type: String,
       require: true,
     },
+  
+
     email: {
       type: String,
       required: true,
-    
+
       validate: {
         validator: async (value) => {
           let matched = await mongoose.models.User.findOne({ email: value });
@@ -23,8 +26,6 @@ const userSchema = mongoose.Schema(
     role: {
       type: String,
       enum: ["buyer", "seller"],
-      
-
     },
     password: {
       type: String,

@@ -59,9 +59,10 @@ const createProduct = async (req, res, next) => {
       await Product.create(value);
       res.status(200).send({ message: "Product created sucessfully" });
     } else {
-      next(error);
+  throw error
     }
   } catch (err) {
+   
     next(err);
   }
 };

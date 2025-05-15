@@ -19,7 +19,7 @@ const createOrder = async (req, res, next) => {
       await Order.create(value);
       res.status(200).send({ message: "orederd  created sucessfully" });
     } else {
-      next(error);
+     throw error
     }
   } catch (err) {
     next(err);
