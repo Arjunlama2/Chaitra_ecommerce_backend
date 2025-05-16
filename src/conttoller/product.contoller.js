@@ -8,6 +8,7 @@ const productSchema = Joi.object({
   description: Joi.string().required(),
   category: Joi.string(),
   createdBy: Joi.string(),
+  image: Joi.string().required(),
 });
 
 const getProducts = async (req, res, next) => {
@@ -31,19 +32,18 @@ const getProducts = async (req, res, next) => {
     } else if (sort == "titleDesc") {
       sortBy = { title: -1 };
     }
-    
+
     let productFilter = {
       name: new RegExp(req.query.search, "i"),
-     
-      
+
       $and: [{ price: { $gte: priceFrom } }, { price: { $lte: priceTo } }],
     };
     const product = await Product.find(productFilter)
       .populate("category")
       .sort(sortBy)
-      .skip((page-1)*perPage)
+      .skip((page - 1) * perPage)
       .limit(perPage)
-      .populate("createdBy", { password: 0 ,role:0});
+      .populate("createdBy", { password: 0, role: 0 });
     res.status(200).send(product);
   } catch (err) {
     next(err);
@@ -51,6 +51,10 @@ const getProducts = async (req, res, next) => {
 };
 
 const createProduct = async (req, res, next) => {
+  console.log(req.body);
+  if (req.file) {
+    req.body.image = req.file.path;
+  }
   try {
     const { error, value } = productSchema.validate(req.body, {
       allowUnknown: true,
@@ -59,10 +63,9 @@ const createProduct = async (req, res, next) => {
       await Product.create(value);
       res.status(200).send({ message: "Product created sucessfully" });
     } else {
-  throw error
+      throw error;
     }
   } catch (err) {
-   
     next(err);
   }
 };

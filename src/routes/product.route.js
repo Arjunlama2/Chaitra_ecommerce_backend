@@ -4,10 +4,11 @@ const {
   createProduct,
   getProducts,
 } = require("../conttoller/product.contoller");
+const upload = require("../congfig/multer");
 
 const router = express.Router();
 router.route("/").get(getProducts)
-.post(authenticate, isSeller, createProduct);
+.post(authenticate, isSeller,upload.single("image"), createProduct);
 // router.route("/:id").get().delete().patch()
 
 module.exports = router;
