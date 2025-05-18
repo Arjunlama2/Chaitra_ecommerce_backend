@@ -1,14 +1,14 @@
 const Joi = require("joi");
 const Category = require("../model/category.model");
 const Product = require("../model/product.model");
-
+const path = require("path");
 const productSchema = Joi.object({
   name: Joi.string().required(),
   price: Joi.string().required(),
   description: Joi.string().required(),
   category: Joi.string(),
   createdBy: Joi.string(),
-  image: Joi.string().required(),
+  image: Joi.array().items(Joi.string()).required(),
 });
 
 const getProducts = async (req, res, next) => {
@@ -51,25 +51,37 @@ const getProducts = async (req, res, next) => {
 };
 
 const createProduct = async (req, res, next) => {
-  console.log(req.body);
-  if (req.file) {
-    req.body.image = req.file.path;
-  }
-  try {
-    const { error, value } = productSchema.validate(req.body, {
-      allowUnknown: true,
+  if (req.files) {
+    req.body.image = [];
+    req.files.map((el, index) => {
+      let imagePath = "";
+      imagePath = path
+        .join("/", "uploads", `${el.filename}`)
+        .replaceAll("\\", "/");
+    
+      req.body.image[index] = imagePath;
     });
-    if (!error) {
-      await Product.create(value);
-      res.status(200).send({ message: "Product created sucessfully" });
-    } else {
-      throw error;
+
+    try {
+      const { error, value } = productSchema.validate(req.body, {
+        allowUnknown: true,
+      });
+
+      if (!error) {
+        await Product.create(value);
+        res.status(200).send({ message: "Product created sucessfully" });
+      } else {
+        throw error;
+      }
+    } catch (err) {
+
+      // image delete image from uploads
+      // by using fs 
+
+      next(err);
     }
-  } catch (err) {
-    next(err);
   }
 };
-
 module.exports = {
   createProduct,
   getProducts,

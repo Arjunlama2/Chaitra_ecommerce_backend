@@ -8,7 +8,7 @@ const upload = require("../congfig/multer");
 
 const router = express.Router();
 router.route("/").get(getProducts)
-.post(authenticate, isSeller,upload.single("image"), createProduct);
+.post(authenticate, isSeller,upload.array("image"), createProduct);
 // router.route("/:id").get().delete().patch()
 
 module.exports = router;

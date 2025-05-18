@@ -29,13 +29,14 @@ const handleError = (err, req, res, next) => {
     });
   }
 
-  res.status(statusCode).send({
+  res.status(status).send({
     msg,
     errors,
    
   });
   }else{
-    res.status(statu).send({message})
+
+    res.status(status).send({message,err})
   }
   }
 
