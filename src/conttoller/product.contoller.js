@@ -1,6 +1,7 @@
 const Joi = require("joi");
 const Category = require("../model/category.model");
 const Product = require("../model/product.model");
+const mongoose=require("mongoose")
 const path = require("path");
 const productSchema = Joi.object({
   name: Joi.string().required(),
@@ -82,7 +83,53 @@ const createProduct = async (req, res, next) => {
     }
   }
 };
+
+const getSingleProduct=async(req,res,next)=>{
+try{
+  const productId=req.params.id
+  const id= new mongoose.Types.ObjectId(productId)
+  const productDetails=await Product.findById(id)
+res.status(200).send(productDetails)
+}catch(err){
+  next(err)
+}
+}
+
+
+const deletePorduct=async(req,res,next)=>{
+try{
+const id=new mongoose.Types.ObjectId(req.params.id)
+await Product.FindOneAndDelete(id)
+res.status(200).send({message:"Operation success"})
+}catch(err){
+  next(err)
+}
+
+}
+const updateProduct=async(req,res,next)=>{
+  try{
+    
+const id=new mongoose.Types.ObjectId(req.params.id)
+const {error,value}=productSchema.validate({
+   allowUnknown: true,
+   
+})
+if(!error){
+
+  const updatedData=await Product.findByIdAndUpdate(id,value)
+  res.status(200).send(updatedData)
+}else{
+  throw error
+}
+
+  }catch(err){
+    next(err)
+  }
+}
 module.exports = {
   createProduct,
   getProducts,
+  getSingleProduct,
+  deletePorduct,
+  updateProduct
 };

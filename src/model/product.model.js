@@ -35,7 +35,7 @@ const productSchema=mongoose.Schema({
 }
 
 )
-
+// productSchema.post("FindOneAndDelete")
 
 
 const Product=mongoose.model("Product",productSchema)
