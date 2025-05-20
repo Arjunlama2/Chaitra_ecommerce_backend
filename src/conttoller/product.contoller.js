@@ -1,8 +1,10 @@
 const Joi = require("joi");
 const Category = require("../model/category.model");
 const Product = require("../model/product.model");
-const mongoose=require("mongoose")
+const mongoose = require("mongoose");
 const path = require("path");
+const { deleteImage } = require("../utils/deleteImage");
+const APIError = require("../utils/apiError");
 const productSchema = Joi.object({
   name: Joi.string().required(),
   price: Joi.string().required(),
@@ -59,7 +61,7 @@ const createProduct = async (req, res, next) => {
       imagePath = path
         .join("/", "uploads", `${el.filename}`)
         .replaceAll("\\", "/");
-    
+
       req.body.image[index] = imagePath;
     });
 
@@ -75,61 +77,64 @@ const createProduct = async (req, res, next) => {
         throw error;
       }
     } catch (err) {
-
       // image delete image from uploads
-      // by using fs 
+      // by using fs
+      if (req.files) {
+        req.files.map((el) => {
+         const res= deleteImage(el.filename);
+ 
+        });
+      }
+console.log(err)
 
       next(err);
     }
   }
 };
 
-const getSingleProduct=async(req,res,next)=>{
-try{
-  const productId=req.params.id
-  const id= new mongoose.Types.ObjectId(productId)
-  const productDetails=await Product.findById(id)
-res.status(200).send(productDetails)
-}catch(err){
-  next(err)
-}
-}
+const getSingleProduct = async (req, res, next) => {
+  try {
+    const productId = req.params.id;
 
-
-const deletePorduct=async(req,res,next)=>{
-try{
-const id=new mongoose.Types.ObjectId(req.params.id)
-await Product.FindOneAndDelete(id)
-res.status(200).send({message:"Operation success"})
-}catch(err){
-  next(err)
-}
-
-}
-const updateProduct=async(req,res,next)=>{
-  try{
-    
-const id=new mongoose.Types.ObjectId(req.params.id)
-const {error,value}=productSchema.validate({
-   allowUnknown: true,
-   
-})
-if(!error){
-
-  const updatedData=await Product.findByIdAndUpdate(id,value)
-  res.status(200).send(updatedData)
-}else{
-  throw error
-}
-
-  }catch(err){
-    next(err)
+    const id = new mongoose.Types.ObjectId(productId);
+    const productDetails = await Product.findById(id);
+    res.status(200).send(productDetails);
+  } catch (err) {
+    next(err);
   }
-}
+};
+
+const deletePorduct = async (req, res, next) => {
+  try {
+    const id = new mongoose.Types.ObjectId(req.params.id);
+    await Product.FindOneAndDelete(id);
+    res.status(200).send({ message: "Operation success" });
+  } catch (err) {
+    next(err);
+  }
+};
+const updateProduct = async (req, res, next) => {
+  try {
+    const id = new mongoose.Types.ObjectId(req.params.id);
+
+    const { error, value } = productSchema.validate(req.body, {
+      allowUnknown: true,
+    });
+    if (!error) {
+      const updatedData = await Product.findByIdAndUpdate(id, value);
+      res.status(200).send(updatedData);
+    } else {
+      throw error;
+    }
+  } catch (err) {
+    //delete
+    next(err);
+  }
+};
 module.exports = {
   createProduct,
   getProducts,
   getSingleProduct,
   deletePorduct,
-  updateProduct
+  updateProduct,
 };

@@ -4,7 +4,7 @@ const Product = require("../model/product.model")
 
 
 const isMyProduct =async(req,res,next)=>{
-const user_id=new mongoose.Types.ObjectId(req.user.user_id)
+const user_id=new mongoose.Types.ObjectId(req.user._id)
 const product_id=new mongoose.Types.ObjectId(req.params.id)
 
 const check=Product.findOne({

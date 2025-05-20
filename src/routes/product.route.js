@@ -13,9 +13,16 @@ const { isMyProduct } = require("../middleware/isMyProduct");
 const router = express.Router();
 router.route("/").get(getProducts)
 .post(authenticate, isSeller,upload.array("image"), createProduct);
-router.route("/:id").get(
+
+
+router.route("/:id")
+.get(
   getSingleProduct
-).delete(
+)
+
+
+.delete(
+  authenticate,isSeller,isMyProduct,
   deletePorduct
 )
 .patch(
