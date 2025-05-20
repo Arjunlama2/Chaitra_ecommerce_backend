@@ -1,4 +1,5 @@
-const mongoose=require("mongoose")
+const mongoose=require("mongoose");
+const { deleteImage } = require("../utils/deleteImage");
 
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
@@ -41,14 +42,7 @@ productSchema.post("findOneAndDelete", async function (doc) {
     console.log("deleting images")
   if (doc && doc.image && Array.isArray(doc.image)) {
     for (const filename of doc.image) {
-      const filePath = path.join(__dirname, '../../uploads', filename);
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.error('Error deleting file:', filePath, err);
-        } else {
-          console.log('Deleted file:', filePath);
-        }
-      });
+    deleteImage(filename)
     }
   }
 });

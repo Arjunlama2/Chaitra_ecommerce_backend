@@ -131,6 +131,9 @@ const updateProduct = async (req, res, next) => {
     next(err);
   }
 };
+
+
+
 module.exports = {
   createProduct,
   getProducts,

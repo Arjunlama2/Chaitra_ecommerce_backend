@@ -18,6 +18,7 @@ const handleError = (err, req, res, next) => {
   if(err.errors){
         msg = "Bad Request / Validation Error";
     statusCode = 400;
+    
     let errsArray = Object.entries(err.errors);
     errors = [];
 
