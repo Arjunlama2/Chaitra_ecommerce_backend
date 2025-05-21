@@ -1,13 +1,14 @@
-
-class APIError extends Error {
-  constructor(message, statusCode = 500, isOperational = true) {
+class ApiError extends Error {
+  constructor(statusCode, message, isOperational = true, stack = "") {
     super(message);
-
     this.statusCode = statusCode;
-    this.isOperational = isOperational; // To distinguish expected vs programming errors
-    this.name = this.constructor.name;
-    Error.captureStackTrace(this, this.constructor);
+    this.isOperational = isOperational;
+    if (stack) {
+      this.stack = stack;
+    } else {
+      Error.captureStackTrace(this, this.constructor);
+    }
   }
 }
 
-module.exports = APIError;
+module.exports = ApiError;

@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const { deleteImage } = require("../utils/deleteImage");
 const APIError = require("../utils/apiError");
+const ApiError = require("../utils/apiError");
 const productSchema = Joi.object({
   name: Joi.string().required(),
   price: Joi.string().required(),
@@ -85,12 +86,18 @@ const createProduct = async (req, res, next) => {
  
         });
       }
-console.log(err)
+ var message=""
+  if(err.details){
+    err.details.map((el)=>{
+      message+=`${el.message},`
+    })
+  }
 
-      next(err);
+    next(new ApiError(401,message ));
+  }
     }
   }
-};
+
 
 const getSingleProduct = async (req, res, next) => {
   try {
@@ -127,8 +134,14 @@ const updateProduct = async (req, res, next) => {
       throw error;
     }
   } catch (err) {
-    //delete
-    next(err);
+    var message=""
+  if(err.details){
+    err.details.map((el)=>{
+      message+=`${el.message},`
+    })
+  }
+  console.log("this is messgae",message)
+    next(new ApiError(401,message ));
   }
 };
 

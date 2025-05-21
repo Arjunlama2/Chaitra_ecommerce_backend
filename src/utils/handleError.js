@@ -1,52 +1,46 @@
-const { model } = require("mongoose");
+const mongoose = require("mongoose");
 
-const handleError = (err, req, res, next) => {
-  let status = 500;
-  let message = "Internal Server Error";
+const ApiError = require("./apiError");
+const dontenv=require("dotenv")
+dontenv.config()
 
-  if (err.name == "ValidationError") {
-    status = 400;
-
-    if (err.details) {
-      let message = "";
-      err.details.map((el) => {
-        message += `${el.path} is required, `;
-      });
-      status = 400;
-      res.status(status).send({ message });
-    }
-  if(err.errors){
-        msg = "Bad Request / Validation Error";
-    statusCode = 400;
-    
-    let errsArray = Object.entries(err.errors);
-    errors = [];
-
-    errsArray.forEach((el) => {
-      errors.push({
-        field: el[0],
-        msg: el[1].message,
-      });
-    });
+const errorConverter = (err, req, res, next) => {
+  let error = err;
+  if (!(error instanceof ApiError)) {
+    const statusCode =
+      error.statusCode || error instanceof mongoose.Error
+        ? 401
+        : 500;
+    const message = error.message || "Internal server Error";
+    error = new ApiError(statusCode, message, false, err.stack);
   }
-
-  res.status(status).send({
-    msg,
-    errors,
-   
-  });
-  }else{
-
-    res.status(status).send({message,err})
-  }
-  }
-
-
-module.exports = {
-  handleError,
+  next(error);
 };
 
-// 400// client
-// 500/servver
-// model
-// joi
+// eslint-disable-next-line no-unused-vars
+const errorHandler = (err, req, res, next) => {
+  let { statusCode, message } = err;
+  if (process.env.NODE_ENV === "production" && !err.isOperational) {
+    statusCode =401;
+    message ="Internal Server Error";
+  }
+
+  res.locals.errorMessage = err.message;
+
+  const response = {
+    code: statusCode,
+    message,
+    ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
+  };
+
+  if (process.env.NODE_ENV=== "development") {
+    console.log(err)
+  }
+
+  res.status(statusCode).send(response);
+};
+
+module.exports = {
+  errorConverter,
+  errorHandler,
+};

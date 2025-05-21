@@ -6,7 +6,7 @@ const dotenv=require("dotenv")
 const router=require("./routes/index")
 dotenv.config()
 const express=require("express")
-const { handleError } = require("./utils/handleError")
+const { handleError, errorConverter, errorHandler } = require("./utils/handleError")
 const app=express()
 app.get("",(req,res)=>{
     res.send("serve is listing")
@@ -18,7 +18,8 @@ app.use('/uploads', express.static(uploadDir));
 
 app.use("/api/v1",router)
 
-app.use(handleError)
+app.use(errorConverter)
+app.use(errorHandler)
 
 
 module.exports=app
