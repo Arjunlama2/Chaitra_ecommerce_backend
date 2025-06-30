@@ -8,7 +8,7 @@ const errorConverter = (err, req, res, next) => {
   let error = err;
   if (!(error instanceof ApiError)) {
     const statusCode =
-      error.statusCode || error instanceof mongoose.Error
+      error.statusCode || error instanceof mongoose.Error 
         ? 401
         : 500;
     const message = error.message || "Internal server Error";
