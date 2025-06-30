@@ -1,5 +1,6 @@
 
 const path=require("path")
+const cors = require('cors')
 const uploadDir = path.join(__dirname, '../uploads');
 
 const dotenv=require("dotenv")
@@ -12,6 +13,7 @@ app.get("",(req,res)=>{
     res.send("serve is listing")
 })
 app.use(express.json())
+app.use(cors())
 
 // Serve static files from the uploads directory
 app.use('/uploads', express.static(uploadDir));
