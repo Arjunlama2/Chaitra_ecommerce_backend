@@ -10,8 +10,9 @@ if(!token){
     res.status(401).send({message:"Please authenticate"})
 }
 
+
 const user  = jwt.verify(token, process.env.JWT_SECRET);
-console.log(user,"this is user")
+
 req.user=user
 next()
 
