@@ -1,4 +1,6 @@
 const jwt = require("jsonwebtoken");
+const dotenv=require("dotenv")
+dotenv.config()
 const { SELLER ,BUYER} = require("../../constants");
 
 const authenticate=(req,res,next)=>{
