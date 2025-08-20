@@ -11,7 +11,7 @@ const productSchema = Joi.object({
   price: Joi.string().required(),
   description: Joi.string().required(),
   category: Joi.string(),
-  createdBy: Joi.string(),
+  createdBy: Joi.string().required(),
   image: Joi.array().items(Joi.string()).required(),
 });
 
@@ -20,7 +20,7 @@ const getProducts = async (req, res, next) => {
     let sort = req.query.sort || "dateDesc";
     let priceFrom = parseFloat(req.query.priceFrom) || 0;
     let priceTo = parseFloat(req.query.priceTo) || 9999999999;
-    let perPage = parseInt(req.query.perPage) || 5;
+    let perPage = parseInt(req.query.perPage) || 10;
     let page = parseInt(req.query.page) || 1;
 
     let sortBy = {
@@ -55,18 +55,16 @@ const getProducts = async (req, res, next) => {
 };
 
 const createProduct = async (req, res, next) => {
+
   if (req.files) {
     req.body.image = [];
     req.files.map((el, index) => {
-      let imagePath = "";
-      imagePath = path
-        .join("/", "uploads", `${el.filename}`)
-        .replaceAll("\\", "/");
 
-      req.body.image[index] = imagePath;
+      req.body.image[index] = el.path;
     });
 
     try {
+      req.body.createdBy=new mongoose.Types.ObjectId(req.user._id)
       const { error, value } = productSchema.validate(req.body, {
         allowUnknown: true,
       });

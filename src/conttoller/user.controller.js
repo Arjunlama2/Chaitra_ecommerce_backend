@@ -63,7 +63,7 @@ const login = async (req, res, next) => {
       const check = await bcrypt.compare(value.password, user.password);
     
       if (!check) {
-        res.status(403).send({ message: "Wrong credential " });
+        res.status(403).send({ message: "Wrong credential" });
       }
 
       user = { ...user.toObject() };
